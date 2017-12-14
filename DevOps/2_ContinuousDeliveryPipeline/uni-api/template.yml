@@ -62,3 +62,25 @@ Resources:
       Role:
         Fn::ImportValue:
           !Join ['-', [!Ref 'ProjectId', !Ref 'AWS::Region', 'LambdaTrustRole']]
+  
+  UpdateFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      FunctionNAme: 'uni-api-update'
+      Runtime: nodejs6.10
+      CodeUri: app
+      Handler: update.lambda_handler
+      Description: Update Unicorns
+      Timeout: 10
+      Events:
+        POST:
+          Type: Api
+          Properties: 
+            Path: /unicorns/{name}
+            Method: put
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref Table
+      Role:
+        Fn::ImportValue:
+          !Join ['-', [!Ref 'ProjectId', !Ref 'AWS::Region', 'LambdaTrustRole']]
